@@ -1,4 +1,7 @@
 # BulletSharp
+
+This is a fork of the BulletSharpPInvoke project. The c# wrappers have been modified slightly so that they work in Unity3d and Mono 2.0 instead of .Net 4.5.
+
 BulletSharp is a .NET wrapper for the [Bullet](http://bulletphysics.org/) physics library.
 
 This version uses Platform Invoke. There is also an equivalent version written in C++/CLI: https://github.com/AndresTraks/BulletSharp

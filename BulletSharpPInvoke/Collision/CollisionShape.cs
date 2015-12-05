@@ -31,7 +31,7 @@ namespace BulletSharp
             }
             else
             {
-                GCHandle handle = GCHandle.Alloc(this, GCHandleType.Weak);
+                GCHandle handle = GCHandle.Alloc(this, GCHandleType.Normal);
                 btCollisionShape_setUserPointer(native, GCHandle.ToIntPtr(handle));
             }
 		}

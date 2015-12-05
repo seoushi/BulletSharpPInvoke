@@ -347,7 +347,7 @@ namespace BulletSharp
                 {
                     throw new ArgumentOutOfRangeException("index");
                 }
-                return (uint)Marshal.ReadInt32(_native + index * sizeof(uint));
+                return (uint)Marshal.ReadInt32(_native.Add(index * sizeof(uint)));
             }
             set
             {

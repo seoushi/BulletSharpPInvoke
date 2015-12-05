@@ -372,7 +372,7 @@ namespace BulletSharp
             IntPtr ptr;
             if (_totalSize != 0)
             {
-                ptr = _buffer + _currentSize;
+                ptr = _buffer.Add(_currentSize);
                 _currentSize += size;
                 Debug.Assert(_currentSize < _totalSize);
             }
@@ -388,7 +388,7 @@ namespace BulletSharp
         {
             int length = (int)size * numElements;
             IntPtr ptr = InternalAlloc(length + ChunkInd.Size);
-            IntPtr data = ptr + ChunkInd.Size;
+            IntPtr data = ptr.Add( ChunkInd.Size );
             Chunk chunk = new Chunk(ptr, true)
             {
                 ChunkCode = 0,
@@ -447,13 +447,13 @@ namespace BulletSharp
 
 				IntPtr currentPtr = _buffer;
                 WriteHeader(_buffer);
-				currentPtr += 12;
+				currentPtr = currentPtr.Add(12);
                 mysize += 12;
 				for (int i=0;i<	_chunkPtrs.Count;i++)
 				{
 					int curLength = ChunkInd.Size + _chunkPtrs[i].Length;
                     Marshal.StructureToPtr(_chunkPtrs[i], currentPtr, false);
-					currentPtr+=curLength;
+					currentPtr=currentPtr.Add(curLength);
 					mysize+=curLength;
 				}
 			}
@@ -498,7 +498,7 @@ namespace BulletSharp
                 return uniquePtr;
             }
             
-            _uniqueIdGenerator = IntPtr.Add(_uniqueIdGenerator, 1);
+            _uniqueIdGenerator = _uniqueIdGenerator.Add(1);
             _uniquePointers.Add(oldPtr, _uniqueIdGenerator);
 
             return _uniqueIdGenerator;

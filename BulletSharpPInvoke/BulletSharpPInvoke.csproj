@@ -10,8 +10,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>BulletSharp</RootNamespace>
     <AssemblyName>BulletSharp</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -198,10 +199,10 @@
     <Compile Include="LinearMath\MotionState.cs" />
     <Compile Include="LinearMath\PolarDecomposition.cs" />
     <Compile Include="LinearMath\Serializer.cs" />
-    <Compile Include="LinearMath\TransformUtil.cs" />
     <Compile Include="MathUtil.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Math\BSExtensionMethods.cs" />
     <Compile Include="Math\Matrix.cs" />
     <Compile Include="Math\Quaternion.cs" />
     <Compile Include="Math\Vector3.cs" />

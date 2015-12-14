@@ -932,9 +932,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="CMakeLists.txt" />
-  </ItemGroup>
-  <ItemGroup>
     <Filter Include="Source Files">
       <UniqueIdentifier>{A5F55DAB-1550-4DE3-A0DB-B1100D42E93B}</UniqueIdentifier>
     </Filter>

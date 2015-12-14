@@ -528,7 +528,7 @@ namespace DemoFramework
             //rigidbody is dynamic if and only if mass is non zero, otherwise static
             bool isDynamic = (mass != 0.0f);
 
-            Vector3 localInertia = Vector3.Zero;
+            Vector3 localInertia =  Vector3.Zero;
             if (isDynamic)
                 shape.CalculateLocalInertia(mass, out localInertia);
 

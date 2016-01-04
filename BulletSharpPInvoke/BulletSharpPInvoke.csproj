@@ -38,6 +38,7 @@
     <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BSExtensionMethods.cs" />
     <Compile Include="Collision\ActivatingCollisionAlgorithm.cs" />
     <Compile Include="Collision\Box2DBox2DCollisionAlgorithm.cs" />
     <Compile Include="Collision\Box2DShape.cs" />
@@ -202,7 +203,6 @@
     <Compile Include="MathUtil.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Math\BSExtensionMethods.cs" />
     <Compile Include="Math\Matrix.cs" />
     <Compile Include="Math\Quaternion.cs" />
     <Compile Include="Math\Vector3.cs" />

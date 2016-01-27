@@ -4,38 +4,19 @@ using System.Linq;
 
 namespace BulletSharpGen
 {
-    class HeaderDefinition
+    public class HeaderDefinition
     {
         public string Name { get; set; }
         public string Filename { get; set; }
         public List<ClassDefinition> Classes { get; set; }
         public List<HeaderDefinition> Includes { get; set; }
-        public List<EnumDefinition> Enums { get; set; }
+        public bool IsExcluded { get; set; }
 
-        string _managedName;
-        public string ManagedName
-        {
-            get { return _managedName ?? Name; }
-            set { _managedName = value; }
-        }
+        public string ManagedName { get; set; }
 
-        public IEnumerable<ClassDefinition> AllSubClasses
+        public IEnumerable<ClassDefinition> AllClasses
         {
-            get
-            {
-                List<ClassDefinition> subClasses = new List<ClassDefinition>();
-                foreach (ClassDefinition cl in Classes)
-                {
-                    subClasses.AddRange(cl.AllSubClasses);
-                    subClasses.Add(cl);
-                }
-                return subClasses;
-            }
-        }
-
-        public bool IsExcluded
-        {
-            get { return Classes.All(x => x.IsExcluded); }
+            get { return Classes.Concat(Classes.SelectMany(c => c.AllSubClasses)); }
         }
 
         public HeaderDefinition(string filename)
@@ -44,7 +25,6 @@ namespace BulletSharpGen
             Filename = filename;
             Classes = new List<ClassDefinition>();
             Includes = new List<HeaderDefinition>();
-            Enums = new List<EnumDefinition>();
         }
 
         public override string ToString()

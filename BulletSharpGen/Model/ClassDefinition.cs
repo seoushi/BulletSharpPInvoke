@@ -3,7 +3,15 @@ using System.Linq;
 
 namespace BulletSharpGen
 {
-    class CachedProperty
+    public enum RefAccessSpecifier
+    {
+        Public,
+        Protected,
+        Private,
+        Internal
+    }
+
+    public class CachedProperty
     {
         public PropertyDefinition Property { get; private set; }
         public string CacheFieldName { get; private set; }
@@ -20,14 +28,14 @@ namespace BulletSharpGen
             else
             {
                 string name = property.Name;
-                CacheFieldName = "_" + name.Substring(0, 1).ToLower() + name.Substring(1);
+                CacheFieldName = "_" + char.ToLower(name[0]) + name.Substring(1);
             }
 
             Access = RefAccessSpecifier.Private;
         }
     }
 
-    class ClassDefinition
+    public class ClassDefinition
     {
         public string Name { get; private set; }
         public string NamespaceName { get; set; }
@@ -53,11 +61,31 @@ namespace BulletSharpGen
         public bool IsTypedef { get; set; }
         public TypeRefDefinition TypedefUnderlyingType { get; set; }
 
+        public string ManagedName { get; set; }
+
+        public Dictionary<string, CachedProperty> CachedProperties { get; private set; }
+
+        public IEnumerable<MethodDefinition> AbstractMethods
+        {
+            get
+            {
+                var abstractMethods = Methods.Where(m => m.IsAbstract);
+                if (BaseClass == null)
+                {
+                    return abstractMethods;
+                }
+
+                // Abstract methods from base classes that aren't implemented in this class
+                var baseAbstractMethods = BaseClass.AbstractMethods.Where(am => !Methods.Any(m => m.Equals(am)));
+
+                return abstractMethods.Concat(baseAbstractMethods);
+            }
+        }
+
         // Pure enum = enum wrapped in a struct
-        public EnumDefinition Enum { get; set; }
         public bool IsPureEnum
         {
-            get { return Enum != null && Methods.Count == 0; }
+            get { return this is EnumDefinition && Methods.Count == 0; }
         }
 
         // static class contains only static methods
@@ -66,25 +94,9 @@ namespace BulletSharpGen
             get { return Methods.Count != 0 && Methods.All(x => x.IsStatic); }
         }
 
-        public bool HasCppDefaultConstructor
-        {
-            get { return !HidePublicConstructors && Methods.Count(m => m.IsConstructor) == 0; }
-        }
-
-        public string ManagedName { get; set; }
-
         public IEnumerable<ClassDefinition> AllSubClasses
         {
-            get
-            {
-                List<ClassDefinition> subClasses = new List<ClassDefinition>();
-                foreach (ClassDefinition cl in Classes)
-                {
-                    subClasses.AddRange(cl.AllSubClasses);
-                    subClasses.Add(cl);
-                }
-                return subClasses;
-            }
+            get { return Classes.Concat(Classes.SelectMany(c => c.AllSubClasses)); }
         }
 
         public string FullyQualifiedName
@@ -138,8 +150,6 @@ namespace BulletSharpGen
                 return ManagedName;
             }
         }
-
-        public Dictionary<string, CachedProperty> CachedProperties { get; private set; }
 
         public ClassDefinition(string name, HeaderDefinition header = null, ClassDefinition parent = null)
         {

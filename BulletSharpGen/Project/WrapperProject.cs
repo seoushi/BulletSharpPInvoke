@@ -12,6 +12,11 @@ namespace BulletSharpGen
         public Dictionary<string, ClassDefinition> ClassDefinitions = new Dictionary<string, ClassDefinition>();
         public Dictionary<string, HeaderDefinition> HeaderDefinitions = new Dictionary<string, HeaderDefinition>();
 
+        public ISymbolMapping ClassNameMapping { get; set; }
+        public ISymbolMapping HeaderNameMapping { get; set; }
+        public ISymbolMapping MethodNameMapping { get; set; }
+        public ISymbolMapping ParameterNameMapping { get; set; }
+
         public List<string> SourceRootFolders { get; set; }
 
         public WrapperProject()

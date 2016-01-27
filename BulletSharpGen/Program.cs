@@ -20,6 +20,8 @@ namespace BulletSharpGen
 
             var reader = new CppReader(project);
             var parser = new BulletParser(project);
+            parser.Parse();
+            Console.WriteLine("Parsing complete");
 
             WrapperWriter writer;
             if (cppCliMode)
@@ -28,7 +30,7 @@ namespace BulletSharpGen
             }
             else
             {
-                writer = new PInvokeWriter(project.HeaderDefinitions.Values, project.NamespaceName);
+                writer = new PInvokeWriter(project);
 
                 var extensionWriter = new ExtensionsWriter(project.HeaderDefinitions.Values, project.NamespaceName);
                 extensionWriter.Output();

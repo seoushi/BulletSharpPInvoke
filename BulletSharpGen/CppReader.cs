@@ -14,7 +14,6 @@ namespace BulletSharpGen
         public ClassDefinition Class { get; set; }
         public MethodDefinition Method { get; set; }
         public ParameterDefinition Parameter { get; set; }
-        public EnumDefinition Enum { get; set; }
         public FieldDefinition Field { get; set; }
 
         public AccessSpecifier MemberAccess { get; set; }
@@ -22,11 +21,10 @@ namespace BulletSharpGen
 
     class CppReader
     {
-        string src;
         Index index;
         List<string> headerQueue = new List<string>();
         List<string> clangOptions = new List<string>();
-        Dictionary<string, string> excludedMethods = new Dictionary<string, string>();
+        HashSet<string> excludedMethods = new HashSet<string>();
 
         ReaderContext _context = new ReaderContext();
         WrapperProject project;
@@ -35,23 +33,41 @@ namespace BulletSharpGen
         {
             this.project = project;
 
-            string sourceDirectory = project.SourceRootFolders[0];
-            src = Path.GetFullPath(sourceDirectory);
-            src = src.Replace('\\', '/');
+            foreach (string sourceRelDir in project.SourceRootFolders)
+            {
+                string sourceFullDir = Path.GetFullPath(sourceRelDir).Replace('\\', '/');
 
-            string[] commonHeaders;
-            List<string> excludedHeaders = new List<string>();
+                // Enumerate all header files in the source tree
+                var headerFiles = Directory.EnumerateFiles(sourceFullDir, "*.h", SearchOption.AllDirectories);
+                foreach (string headerFullDir in headerFiles)
+                {
+                    string headerFullDirCanonical = headerFullDir.Replace('\\', '/');
+                    string headerRelDir = headerFullDirCanonical.Substring(sourceFullDir.Length);
 
-            // Exclude C API
-            excludedHeaders.Add(src + "Bullet-C-Api.h");
+                    HeaderDefinition header;
+                    if (project.HeaderDefinitions.TryGetValue(headerFullDirCanonical, out header))
+                    {
+                        if (header.IsExcluded)
+                        {
+                            continue;
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("New file {0}", headerFullDirCanonical);
+                    }
 
-            // Include directory
-            clangOptions.Add("-I");
-            clangOptions.Add(src);
+                    headerQueue.Add(headerFullDirCanonical);
+                }
+
+                // Include directory
+                clangOptions.Add("-I");
+                clangOptions.Add(sourceFullDir);
+            }
 
             // WorldImporter include directory
-            clangOptions.Add("-I");
-            clangOptions.Add(src + "../Extras/Serialize/BulletWorldImporter");
+            //clangOptions.Add("-I");
+            //clangOptions.Add(src + "../Extras/Serialize/BulletWorldImporter");
 
             // Specify C++ headers, not C ones
             clangOptions.Add("-x");
@@ -60,64 +76,35 @@ namespace BulletSharpGen
             //clangOptions.Add("-DUSE_DOUBLE_PRECISION");
 
             // Exclude irrelevant methods
-            excludedMethods.Add("operator new", null);
-            excludedMethods.Add("operator delete", null);
-            excludedMethods.Add("operator new[]", null);
-            excludedMethods.Add("operator delete[]", null);
-            excludedMethods.Add("operator+=", null);
-            excludedMethods.Add("operator-=", null);
-            excludedMethods.Add("operator*=", null);
-            excludedMethods.Add("operator/=", null);
-            excludedMethods.Add("operator==", null);
-            excludedMethods.Add("operator!=", null);
-            excludedMethods.Add("operator()", null);
-
-            // Enumerate all header files in the source tree
-            var headerFiles = Directory.EnumerateFiles(src, "*.h", SearchOption.AllDirectories);
-            foreach (string header in headerFiles)
-            {
-                if (header.Contains("GpuSoftBodySolvers") || header.Contains("vectormath"))
-                {
-                    continue;
-                }
-
-                string headerCanonical = header.Replace('\\', '/');
-                if (!excludedHeaders.Contains(headerCanonical))
-                {
-                    headerQueue.Add(headerCanonical);
-                }
-            }
+            excludedMethods.Add("operator new");
+            excludedMethods.Add("operator delete");
+            excludedMethods.Add("operator new[]");
+            excludedMethods.Add("operator delete[]");
+            excludedMethods.Add("operator+=");
+            excludedMethods.Add("operator-=");
+            excludedMethods.Add("operator*=");
+            excludedMethods.Add("operator/=");
+            excludedMethods.Add("operator==");
+            excludedMethods.Add("operator!=");
+            excludedMethods.Add("operator()");
 
             Console.Write("Reading headers");
 
             index = new Index();
 
-            // Parse the common headers
-            commonHeaders = new[] { src + "btBulletCollisionCommon.h", src + "btBulletDynamicsCommon.h" };
-            foreach (string commonHeader in commonHeaders)
-            {
-                if (!headerQueue.Contains(commonHeader))
-                {
-                    Console.WriteLine("Could not find " + commonHeader);
-                    return;
-                }
-                ReadHeader(commonHeader);
-            }
-
             while (headerQueue.Count != 0)
             {
                 ReadHeader(headerQueue[0]);
             }
-
+            /*
             if (Directory.Exists(src + "..\\Extras\\"))
             {
                 ReadHeader(src + "..\\Extras\\Serialize\\BulletFileLoader\\btBulletFile.h");
                 ReadHeader(src + "..\\Extras\\Serialize\\BulletWorldImporter\\btBulletWorldImporter.h");
                 ReadHeader(src + "..\\Extras\\Serialize\\BulletWorldImporter\\btWorldImporter.h");
                 ReadHeader(src + "..\\Extras\\Serialize\\BulletXmlWorldImporter\\btBulletXmlWorldImporter.h");
-                ReadHeader(src + "..\\Extras\\HACD\\hacdHACD.h");
             }
-
+            */
             index.Dispose();
 
             Console.WriteLine();
@@ -137,7 +124,9 @@ namespace BulletSharpGen
         Cursor.ChildVisitResult HeaderVisitor(Cursor cursor, Cursor parent)
         {
             string filename = cursor.Extent.Start.File.Name.Replace('\\', '/');
-            if (!filename.StartsWith(src, StringComparison.OrdinalIgnoreCase))
+
+            // Skip this header if it's not part of any project source folders
+            if (project.SourceRootFolders.All(s => !filename.StartsWith(s.Replace('\\', '/'), StringComparison.OrdinalIgnoreCase)))
             {
                 return Cursor.ChildVisitResult.Continue;
             }
@@ -150,8 +139,7 @@ namespace BulletSharpGen
             else
             {
                 // No, define a new one
-                string relativeFilename = filename.Substring(src.Length);
-                _context.Header = new HeaderDefinition(relativeFilename);
+                _context.Header = new HeaderDefinition(filename);
                 project.HeaderDefinitions.Add(filename, _context.Header);
                 headerQueue.Remove(filename);
             }
@@ -159,27 +147,22 @@ namespace BulletSharpGen
             if (cursor.Kind == CursorKind.Namespace)
             {
                 _context.Namespace = cursor.Spelling;
-            }
-
-            if ((cursor.Kind == CursorKind.ClassDecl || cursor.Kind == CursorKind.StructDecl ||
-                cursor.Kind == CursorKind.ClassTemplate || cursor.Kind == CursorKind.TypedefDecl) && cursor.IsDefinition)
-            {
-                ParseClassCursor(cursor);
-            }
-            else if (cursor.Kind == CursorKind.EnumDecl)
-            {
-                if (!_context.Header.Enums.Any(x => x.Name.Equals(cursor.Spelling)))
-                {
-                    _context.Enum = new EnumDefinition(cursor.Spelling, cursor.Spelling);
-                    _context.Header.Enums.Add(_context.Enum);
-                    cursor.VisitChildren(EnumVisitor);
-                    _context.Enum = null;
-                }
-            }
-            else if (cursor.Kind == CursorKind.Namespace)
-            {
                 return Cursor.ChildVisitResult.Recurse;
             }
+            else if (cursor.IsDefinition)
+            {
+                switch(cursor.Kind)
+                {
+                    case CursorKind.ClassDecl:
+                    case CursorKind.ClassTemplate:
+                    case CursorKind.EnumDecl:
+                    case CursorKind.StructDecl:
+                    case CursorKind.TypedefDecl:
+                        ParseClassCursor(cursor);
+                        break;
+                }
+            }
+
             return Cursor.ChildVisitResult.Continue;
         }
 
@@ -187,12 +170,15 @@ namespace BulletSharpGen
         {
             if (cursor.Kind == CursorKind.EnumConstantDecl)
             {
-                _context.Enum.EnumConstants.Add(cursor.Spelling);
-                _context.Enum.EnumConstantValues.Add("");
+                var @enum = _context.Class as EnumDefinition;
+                @enum.EnumConstants.Add(cursor.Spelling);
+                @enum.EnumConstantValues.Add("");
             }
             else if (cursor.Kind == CursorKind.IntegerLiteral)
             {
-                //_context.Enum.EnumConstantValues[_context.Enum.EnumConstants.Count - 1] = ".";
+                var @enum = _context.Class as EnumDefinition;
+                Token intLiteralToken = _context.TranslationUnit.Tokenize(cursor.Extent).First();
+                @enum.EnumConstantValues[@enum.EnumConstants.Count - 1] = intLiteralToken.Spelling;
             }
             else if (cursor.Kind == CursorKind.ParenExpr)
             {
@@ -229,6 +215,10 @@ namespace BulletSharpGen
                 if (cursor.Kind == CursorKind.ClassTemplate)
                 {
                     _context.Class = new ClassTemplateDefinition(className, _context.Header, _context.Class);
+                }
+                else if (cursor.Kind == CursorKind.EnumDecl)
+                {
+                    _context.Class = new EnumDefinition(className, _context.Header, _context.Class);
                 }
                 else
                 {
@@ -285,15 +275,7 @@ namespace BulletSharpGen
 
             if (cursor.Kind == CursorKind.EnumDecl)
             {
-                _context.Enum = new EnumDefinition(fullyQualifiedName, cursor.Spelling);
-                _context.Header.Enums.Add(_context.Enum);
                 cursor.VisitChildren(EnumVisitor);
-                if (_context.Class != null)
-                {
-                    // Enum wrapped in a struct
-                    _context.Class.Enum = _context.Enum;
-                }
-                _context.Enum = null;
             }
             else if (cursor.Kind == CursorKind.TypedefDecl)
             {
@@ -389,9 +371,15 @@ namespace BulletSharpGen
                     return Cursor.ChildVisitResult.Continue;
             }
 
+            // We only care about public members
             if (_context.MemberAccess != AccessSpecifier.Public)
             {
-                return Cursor.ChildVisitResult.Continue;
+                // And also private/protected virtual methods that override public abstract methods,
+                // necessary for checking whether a class is abstract or not.
+                if (cursor.IsPureVirtualCxxMethod || !cursor.IsVirtualCxxMethod)
+                {
+                    return Cursor.ChildVisitResult.Continue;
+                }
             }
 
             if ((cursor.Kind == CursorKind.ClassDecl || cursor.Kind == CursorKind.StructDecl ||
@@ -403,7 +391,7 @@ namespace BulletSharpGen
             else if (cursor.Kind == CursorKind.CxxMethod || cursor.Kind == CursorKind.Constructor)
             {
                 string methodName = cursor.Spelling;
-                if (excludedMethods.ContainsKey(methodName))
+                if (excludedMethods.Contains(methodName))
                 {
                     return Cursor.ChildVisitResult.Continue;
                 }
@@ -411,19 +399,11 @@ namespace BulletSharpGen
                 _context.Method = new MethodDefinition(methodName, _context.Class, cursor.NumArguments)
                 {
                     ReturnType = new TypeRefDefinition(cursor.ResultType),
+                    IsConstructor = cursor.Kind == CursorKind.Constructor,
                     IsStatic = cursor.IsStaticCxxMethod,
-                    IsConstructor = cursor.Kind == CursorKind.Constructor
+                    IsVirtual = cursor.IsVirtualCxxMethod,
+                    IsAbstract = cursor.IsPureVirtualCxxMethod
                 };
-
-                if (cursor.IsVirtualCxxMethod)
-                {
-                    _context.Method.IsVirtual = true;
-                    if (cursor.IsPureVirtualCxxMethod)
-                    {
-                        _context.Method.IsAbstract = true;
-                        _context.Class.IsAbstract = true;
-                    }
-                }
 
                 // Check if the return type is a template
                 cursor.VisitChildren(MethodTemplateTypeVisitor);
@@ -451,6 +431,16 @@ namespace BulletSharpGen
                         {
                             _context.Method.Parameters[i].IsOptional = true;
                         }
+                    }
+                }
+
+                // Discard any private/protected virtual method unless it
+                // implements a public abstract method
+                if (_context.MemberAccess != AccessSpecifier.Public)
+                {
+                    if (_context.Method.Parent.BaseClass == null || !_context.Method.Parent.BaseClass.AbstractMethods.Contains(_context.Method))
+                    {
+                        _context.Method.Parent.Methods.Remove(_context.Method);
                     }
                 }
 

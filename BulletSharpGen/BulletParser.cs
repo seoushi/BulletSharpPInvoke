@@ -5,108 +5,17 @@ using System.Text;
 
 namespace BulletSharpGen
 {
-    class BulletParser
+    class BulletParser : DefaultParser
     {
         Dictionary<string, ClassDefinition> classDefinitions = new Dictionary<string, ClassDefinition>();
-        Dictionary<string, HeaderDefinition> ExternalHeaders = new Dictionary<string, HeaderDefinition>();
-
-        Dictionary<string, string> methodNameMapping = new Dictionary<string, string>();
-        Dictionary<string, string> parameterNameMapping = new Dictionary<string, string>();
 
         public BulletParser(WrapperProject project)
+            : base(project)
         {
             classDefinitions = project.ClassDefinitions;
-            ExternalHeaders = project.HeaderDefinitions;
-
-            // Managed method names
-            methodNameMapping.Add("gimpact_vs_compoundshape", "GImpactVsCompoundShape");
-            methodNameMapping.Add("gimpact_vs_concave", "GImpactVsConcave");
-            methodNameMapping.Add("gimpact_vs_gimpact", "GImpactVsGImpact");
-            methodNameMapping.Add("gimpact_vs_shape", "GImpactVsShape");
-            methodNameMapping.Add("collideKDOP", "CollideKdop");
-            methodNameMapping.Add("collideOCL", "CollideOcl");
-            methodNameMapping.Add("collideTTpersistentStack", "CollideTTPersistentStack");
-            methodNameMapping.Add("maxdepth", "MaxDepth");
-            methodNameMapping.Add("updateRHS", "UpdateRhs");
-
-            // Managed method parameter names
-            parameterNameMapping.Add("bcheckexist", "checkExist");
-            parameterNameMapping.Add("childShapeindex", "childShapeIndex");
-            parameterNameMapping.Add("dt", "deltaTime");
-            parameterNameMapping.Add("fromfaces", "fromFaces");
-            parameterNameMapping.Add("i_dataBufferSize", "dataBufferSize");
-            parameterNameMapping.Add("i_swapEndian", "swapEndian");
-            parameterNameMapping.Add("i_alignedDataBuffer", "alignedDataBuffer");
-            parameterNameMapping.Add("o_alignedDataBuffer", "alignedDataBuffer");
-            parameterNameMapping.Add("drawflags", "drawFlags");
-            parameterNameMapping.Add("idraw", "iDraw");
-            parameterNameMapping.Add("indexstride", "indexStride");
-            parameterNameMapping.Add("indicestype", "indicesType");
-            parameterNameMapping.Add("limot", "limitMotor");
-            parameterNameMapping.Add("maxiterations", "maxIterations");
-            parameterNameMapping.Add("maxdepth", "maxDepth");
-            parameterNameMapping.Add("mindepth", "minDepth");
-            parameterNameMapping.Add("nodeindex", "nodeIndex");
-            parameterNameMapping.Add("numfaces", "numFaces");
-            parameterNameMapping.Add("numindices", "numIndices");
-            parameterNameMapping.Add("numverts", "numVerts");
-            parameterNameMapping.Add("paircache", "pairCache");
-            parameterNameMapping.Add("rbA", "rigidBodyA");
-            parameterNameMapping.Add("rbB", "rigidBodyB");
-            parameterNameMapping.Add("rbAFrame", "rigidBodyAFrame");
-            parameterNameMapping.Add("rbBFrame", "rigidBodyBFrame");
-            parameterNameMapping.Add("use32bitIndices", "use32BitIndices");
-            parameterNameMapping.Add("use4componentVertices", "use4ComponentVertices");
-            parameterNameMapping.Add("vertexbase", "vertexBase");
-
-            // Managed header names
-            var headerNameMapping = new Dictionary<string, string>();
-            headerNameMapping.Add("btActionInterface", "IAction");
-            headerNameMapping.Add("btBox2dBox2dCollisionAlgorithm", "Box2DBox2DCollisionAlgorithm");
-            headerNameMapping.Add("btBox2dShape", "Box2DShape");
-            headerNameMapping.Add("btCompoundFromGimpact", "CompoundFromGImpact");
-            headerNameMapping.Add("btConvex2dConvex2dAlgorithm", "Convex2DConvex2DAlgorithm");
-            headerNameMapping.Add("btConvex2dShape", "Convex2DShape");
-            headerNameMapping.Add("btMLCPSolver", "MlcpSolver");
-            headerNameMapping.Add("btMLCPSolverInterface", "MlcpSolverInterface");
-            headerNameMapping.Add("btNNCGConstraintSolver", "NncgConstraintSolver");
-            headerNameMapping.Add("btSparseSDF", "SparseSdf");
-            headerNameMapping.Add("hacdHACD", "Hacd");
-
-            // Managed class names
-            var classNameMapping = new Dictionary<string, string>();
-            classNameMapping.Add("btAABB", "Aabb");
-            classNameMapping.Add("bt32BitAxisSweep3", "AxisSweep3_32Bit");
-            classNameMapping.Add("btActionInterface", "IAction");
-            classNameMapping.Add("btBox2dBox2dCollisionAlgorithm", "Box2DBox2DCollisionAlgorithm");
-            classNameMapping.Add("btBox2dShape", "Box2DShape");
-            classNameMapping.Add("btConvex2dConvex2dAlgorithm", "Convex2DConvex2DAlgorithm");
-            classNameMapping.Add("btConvex2dShape", "Convex2DShape");
-            classNameMapping.Add("btMLCPSolver", "MlcpSolver");
-            classNameMapping.Add("btMLCPSolverInterface", "MlcpSolverInterface");
-            classNameMapping.Add("btMultibodyLink", "MultiBodyLink");
-            classNameMapping.Add("btNNCGConstraintSolver", "NncgConstraintSolver");
-            classNameMapping.Add("HACD", "Hacd");
-            classNameMapping.Add("GIM_BVH_DATA", "GimBvhData");
-            classNameMapping.Add("GIM_BVH_DATA_ARRAY", "GimBvhDataArray");
-            classNameMapping.Add("GIM_BVH_TREE_NODE", "GimBvhTreeNode");
-            classNameMapping.Add("GIM_BVH_TREE_NODE_ARRAY", "GimBvhTreeNodeArray");
-            classNameMapping.Add("GIM_PAIR", "GimPair");
-            classNameMapping.Add("GIM_TRIANGLE_CONTACT", "GimTriangleContact");
-            classNameMapping.Add("BT_QUANTIZED_BVH_NODE", "GImpactQuantizedBvhNode");
-            classNameMapping.Add("GIM_QUANTIZED_BVH_NODE_ARRAY", "GimGImpactQuantizedBvhNodeArray");
-            classNameMapping.Add("btCPUVertexBufferDescriptor", "CpuVertexBufferDescriptor");
-            classNameMapping.Add("btBU_Simplex1to4", "BuSimplex1To4");
-            classNameMapping.Add("sStkCLN", "StkCln");
-            classNameMapping.Add("sStkNN", "StkNN");
-            classNameMapping.Add("sStkNP", "StkNP");
-            classNameMapping.Add("sStkNPS", "StkNps");
-            classNameMapping.Add("sRayCast", "SRayCast");
-            classNameMapping.Add("RContact", "RigidContact");
-            classNameMapping.Add("SContact", "SoftContact");
 
             // Classes that shouldn't be instantiated by users
-            List<string> hidePublicConstructors = new List<string>() {
+            HashSet<string> hidePublicConstructors = new HashSet<string>() {
                 "btActivatingCollisionAlgorithm", "btContactConstraint", "btConvexInternalShape",
                 "btConvexInternalAabbCachingShape", "btPolyhedralConvexAabbCachingShape", "btTypedObject",
                 "btDbvtProxy", "btSimpleBroadphaseProxy", "btDispatcherInfo", "btTriangleMeshShape",
@@ -119,7 +28,7 @@ namespace BulletSharpGen
             };
 
             // Classes for which no internal constructor is needed
-            List<string> hideInternalConstructor = new List<string>() {
+            HashSet<string> hideInternalConstructor = new HashSet<string>() {
                 "btBox2dBox2dCollisionAlgorithm", "btBoxBoxCollisionAlgorithm",
                 "btBoxBoxDetector", "btBroadphaseRayCallback", "btCollisionAlgorithmConstructionInfo", "btDefaultCollisionConstructionInfo",
                 "btCompoundCompoundCollisionAlgorithm", "btContinuousConvexCollision", "btConvex2dConvex2dAlgorithm",
@@ -160,7 +69,7 @@ namespace BulletSharpGen
             };
 
             // Classes that might be cleaned up by Bullet and not us (use preventDelete to indicate this)
-            List<string> preventDelete = new List<string>() {
+            HashSet<string> preventDelete = new HashSet<string>() {
                 "btAABB", "btCollisionAlgorithmCreateFunc",
                 "btCollisionObject", "btCollisionObjectWrapper", "btCollisionShape",
                 "btCollisionWorld::LocalConvexResult", "btCollisionWorld::LocalRayResult",
@@ -174,311 +83,36 @@ namespace BulletSharpGen
                 "btWheelInfo", "btManifoldPoint", "btCollisionWorld::LocalShapeInfo"};
 
             // Classes that have OnDisposing/OnDisposed events
-            List<string> trackingDisposable = new List<string>() {
-                "btCollisionObject", "btCollisionShape", "btCollisionWorld",
+            HashSet<string> trackingDisposable = new HashSet<string>() {
+                "btCollisionObject", "btCollisionShape",
                 "btDbvt", "btRaycastVehicle", "btTypedConstraint"};
 
-            // Resolve references (match TypeRefDefinitions to ClassDefinitions)
-            // List might be modified with template specialization classes, so make a copy
-            var classDefinitionsList = new List<ClassDefinition>(classDefinitions.Values);
-            foreach (ClassDefinition c in classDefinitionsList)
+            // Apply class properties
+            foreach (ClassDefinition @class in classDefinitions.Values)
             {
-                // Include header for the base if necessary
-                if (c.BaseClass != null && c.Header != c.BaseClass.Header)
+                if (hidePublicConstructors.Contains(@class.FullyQualifiedName))
                 {
-                    c.Header.Includes.Add(c.BaseClass.Header);
+                    @class.HidePublicConstructors = true;
                 }
 
-                // Resolve typedef
-                if (c.TypedefUnderlyingType != null)
+                if (hideInternalConstructor.Contains(@class.FullyQualifiedName))
                 {
-                    ResolveTypeRef(c.TypedefUnderlyingType);
+                    @class.NoInternalConstructor = true;
                 }
-
-                // Resolve method return type and parameter types
-                foreach (MethodDefinition method in c.Methods)
+                if (preventDelete.Contains(@class.FullyQualifiedName))
                 {
-                    ResolveTypeRef(method.ReturnType);
-                    foreach (ParameterDefinition param in method.Parameters)
-                    {
-                        ResolveTypeRef(param.Type);
-                    }
+                    @class.HasPreventDelete = true;
                 }
-
-                // Resolve field types
-                foreach (FieldDefinition field in c.Fields)
+                if (trackingDisposable.Contains(@class.FullyQualifiedName))
                 {
-                    ResolveTypeRef(field.Type);
+                    @class.IsTrackingDisposable = true;
                 }
             }
+        }
 
-            // Exclude all overridden methods
-            foreach (ClassDefinition c in classDefinitions.Values)
-            {
-                int i;
-                for (i = 0; i < c.Methods.Count; )
-                {
-                    var method = c.Methods[i];
-                    // Check if the method already exists in base classes
-                    var baseClass = c.BaseClass;
-                    while (baseClass != null)
-                    {
-                        foreach (MethodDefinition m in baseClass.Methods)
-                        {
-                            if (method.Equals(m))
-                            {
-                                c.Methods.Remove(method);
-                                method = null;
-                                break;
-                            }
-                        }
-                        if (method == null)
-                        {
-                            break;
-                        }
-                        baseClass = baseClass.BaseClass;
-                    }
-                    if (method != null)
-                    {
-                        i++;
-                    }
-                }
-            }
-
-            // Exclude constructors of abstract classes
-            foreach (ClassDefinition c in classDefinitions.Values.Where(c => c.IsAbstract))
-            {
-                int i;
-                for (i = 0; i < c.Methods.Count; )
-                {
-                    var method = c.Methods[i];
-                    if (method.IsConstructor)
-                    {
-                        c.Methods.Remove(method);
-                        continue;
-                    }
-                    i++;
-                }
-            }
-
-            // Exclude duplicate methods
-            foreach (ClassDefinition c in classDefinitions.Values)
-            {
-                for (int i = 0; i < c.Methods.Count; i++)
-                {
-                    for (int j = i + 1; j < c.Methods.Count; j++)
-                    {
-                        if (!c.Methods[i].Equals(c.Methods[j]))
-                        {
-                            continue;
-                        }
-
-                        var iType = c.Methods[i].ReturnType;
-                        var jType = c.Methods[j].ReturnType;
-                        bool iConst = iType.IsConst || (iType.Referenced != null && iType.Referenced.IsConst);
-                        bool jConst = jType.IsConst || (jType.Referenced != null && jType.Referenced.IsConst);
-
-                        // Prefer non-const return value
-                        if (iConst)
-                        {
-                            if (!jConst)
-                            {
-                                c.Methods.RemoveAt(i);
-                                i--;
-                            }
-                        }
-                        else
-                        {
-                            if (jConst)
-                            {
-                                c.Methods.RemoveAt(j);
-                                i--;
-                            }
-                        }
-                        break;
-                    }
-                }
-            }
-
-            // Set managed method/parameter names
-            foreach (var method in classDefinitions.Values.SelectMany(c => c.Methods))
-            {
-                method.ManagedName = GetManagedMethodName(method);
-
-                foreach (var param in method.Parameters)
-                {
-                    param.ManagedName = GetManagedParameterName(param);
-                }
-            }
-
-            // Turn fields into get/set methods
-            foreach (ClassDefinition c in classDefinitions.Values)
-            {
-                foreach (FieldDefinition field in c.Fields)
-                {
-                    ResolveTypeRef(field.Type);
-
-                    string name = field.Name;
-                    if (name.StartsWith("m_"))
-                    {
-                        name = name.Substring(2);
-                    }
-                    name = name.Substring(0, 1).ToUpper() + name.Substring(1); // capitalize
-
-                    // one_two_three -> oneTwoThree
-                    string managedName = name;
-                    while (managedName.Contains("_"))
-                    {
-                        int pos = managedName.IndexOf('_');
-                        managedName = managedName.Substring(0, pos) + managedName.Substring(pos + 1, 1).ToUpper() + managedName.Substring(pos + 2);
-                    }
-
-                    // Generate getter/setter methods
-                    string getterName, setterName;
-                    string managedGetterName, managedSetterName;
-                    if (name.StartsWith("has"))
-                    {
-                        getterName = name;
-                        setterName = "set" + name.Substring(3);
-                        managedGetterName = managedName;
-                        managedSetterName = "Set" + managedName.Substring(3);
-                    }
-                    else if (name.StartsWith("is"))
-                    {
-                        getterName = name;
-                        setterName = "set" + name.Substring(2);
-                        managedGetterName = managedName;
-                        managedSetterName = "Set" + managedName.Substring(2);
-                    }
-                    else
-                    {
-                        getterName = "get" + name;
-                        setterName = "set" + name;
-                        managedGetterName = "Get" + managedName;
-                        managedSetterName = "Set" + managedName;
-                    }
-
-                    // See if there are already accessor methods for this field
-                    MethodDefinition getter = null, setter = null;
-                    foreach (var m in c.Methods)
-                    {
-                        if (m.ManagedName.Equals(managedGetterName) && m.Parameters.Length == 0)
-                        {
-                            getter = m;
-                            continue;
-                        }
-
-                        if (m.ManagedName.Equals(managedSetterName) && m.Parameters.Length == 1)
-                        {
-                            setter = m;
-                        }
-                    }
-
-                    if (getter == null)
-                    {
-                        getter = new MethodDefinition(getterName, c, 0);
-                        getter.ManagedName = managedGetterName;
-                        getter.ReturnType = field.Type;
-                        getter.Field = field;
-                    }
-
-                    var prop = new PropertyDefinition(getter);
-
-                    // Can't assign value to reference or constant array
-                    if (setter == null && !field.Type.IsReference && !field.Type.IsConstantArray)
-                    {
-                        setter = new MethodDefinition(setterName, c, 1);
-                        setter.ManagedName = managedSetterName;
-                        setter.ReturnType = new TypeRefDefinition();
-                        setter.Field = field;
-                        TypeRefDefinition constType;
-                        if (!field.Type.IsBasic && !field.Type.IsPointer)
-                        {
-                            constType = field.Type.Copy();
-                            constType.IsConst = true;
-                        }
-                        else
-                        {
-                            constType = field.Type;
-                        }
-                        setter.Parameters[0] = new ParameterDefinition("value", constType);
-                        setter.Parameters[0].ManagedName = "value";
-
-                        prop.Setter = setter;
-                        prop.Setter.Property = prop;
-                    }
-                }
-            }
-
-            // Turn getters/setters into properties
-            foreach (ClassDefinition c in classDefinitions.Values)
-            {
-                // Getters with return type and 0 arguments
-                foreach (var method in c.Methods)
-                {
-                    if (method.Parameters.Length == 0 && !method.IsVoid &&
-                        (method.Name.StartsWith("get", StringComparison.InvariantCultureIgnoreCase) ||
-                        method.Name.StartsWith("has", StringComparison.InvariantCultureIgnoreCase) ||
-                        method.Name.StartsWith("is", StringComparison.InvariantCultureIgnoreCase)))
-                    {
-                        if (method.Property == null)
-                        {
-                            new PropertyDefinition(method);
-                        }
-                    }
-                }
-
-                // Getters with void type and 1 pointer argument for the return value
-                // TODO: in general, it is not possible to automatically determine
-                // whether such methods can be wrapped by properties or not,
-                // so read this info from the project configuration.
-                foreach (var method in c.Methods)
-                {
-                    if (method.Parameters.Length == 1 && method.IsVoid &&
-                        method.Name.StartsWith("get", StringComparison.InvariantCultureIgnoreCase))
-                    {
-                        if (method.Property != null)
-                        {
-                            continue;
-                        }
-
-                        var paramType = method.Parameters[0].Type;
-                        if (paramType.IsPointer || paramType.IsReference)
-                        {
-                            // TODO: check project configuration
-                            //if (true)
-                            {
-                                new PropertyDefinition(method);
-                            }
-                        }
-                    }
-                }
-
-                // Setters
-                foreach (var method in c.Methods)
-                {
-                    if (method.Parameters.Length == 1 &&
-                        method.Name.StartsWith("set", StringComparison.InvariantCultureIgnoreCase))
-                    {
-                        string name = method.ManagedName.Substring(3);
-                        // Find the property with the matching getter
-                        foreach (PropertyDefinition prop in c.Properties)
-                        {
-                            if (prop.Setter != null)
-                            {
-                                continue;
-                            }
-
-                            if (prop.Name.Equals(name))
-                            {
-                                prop.Setter = method;
-                                method.Property = prop;
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
+        public override void Parse()
+        {
+            base.Parse();
 
             // Check if any property values can be cached in
             // in constructors or property setters
@@ -529,81 +163,12 @@ namespace BulletSharpGen
                 }
             }
 
-            // Get managed header and enum names
-            foreach (HeaderDefinition header in ExternalHeaders.Values)
-            {
-                string name = header.Name;
-                string mapping;
-                if (headerNameMapping.TryGetValue(name, out mapping))
-                {
-                    header.ManagedName = mapping;
-                }
-                else if (name.StartsWith("bt"))
-                {
-                    header.ManagedName = name.Substring(2);
-                }
-                else if (name.StartsWith("hacd"))
-                {
-                    header.ManagedName = "Hacd" + name.Substring(4);
-                }
-
-                foreach (var e in header.Enums)
-                {
-                    if (e.Name.StartsWith("bt"))
-                    {
-                        e.ManagedName = e.Name.Substring(2);
-                    }
-                    else
-                    {
-                        e.ManagedName = e.Name;
-                    }
-                }
-            }
-
-
-            // Apply class properties
-            foreach (ClassDefinition c in classDefinitions.Values)
-            {
-                string name = c.Name;
-                string mapping;
-                if (classNameMapping.TryGetValue(name, out mapping))
-                {
-                    c.ManagedName = mapping;
-                }
-                else if (name.StartsWith("bt") && !name.Equals("btScalar"))
-                {
-                    c.ManagedName = name.Substring(2);
-                }
-                else
-                {
-                    c.ManagedName = name;
-                }
-
-                if (hidePublicConstructors.Contains(c.FullyQualifiedName))
-                {
-                    c.HidePublicConstructors = true;
-                }
-
-                if (hideInternalConstructor.Contains(c.FullyQualifiedName))
-                {
-                    c.NoInternalConstructor = true;
-                }
-                if (preventDelete.Contains(c.FullyQualifiedName))
-                {
-                    c.HasPreventDelete = true;
-                }
-                if (trackingDisposable.Contains(c.FullyQualifiedName))
-                {
-                    c.IsTrackingDisposable = true;
-                }
-            }
-
             // Sort methods and properties alphabetically
-            foreach (ClassDefinition c in classDefinitions.Values)
+            foreach (var @class in classDefinitions.Values)
             {
                 // Order by name, then fix inheritance, parent classes must appear first
-                c.Classes.Sort((c1, c2) => c1.Name.CompareTo(c2.Name));
-                var classesOrdered = c.Classes;
+                @class.Classes.Sort((c1, c2) => c1.Name.CompareTo(c2.Name));
+                var classesOrdered = @class.Classes;
                 for (int i = 0; i < classesOrdered.Count; i++)
                 {
                     var thisClass = classesOrdered[i];
@@ -619,17 +184,9 @@ namespace BulletSharpGen
                     }
                 }
 
-                c.Methods.Sort((m1, m2) => m1.Name.CompareTo(m2.Name));
-                c.Properties.Sort((p1, p2) => p1.Name.CompareTo(p2.Name));
+                @class.Methods.Sort((m1, m2) => m1.Name.CompareTo(m2.Name));
+                @class.Properties.Sort((p1, p2) => p1.Name.CompareTo(p2.Name));
             }
-
-            // Mark excluded classes
-            foreach (ClassDefinition c in classDefinitions.Values.Where(c => IsExcludedClass(c)))
-            {
-                c.IsExcluded = true;
-            }
-
-            Console.WriteLine("Parsing complete");
         }
 
         bool IsCacheableType(TypeRefDefinition t)
@@ -637,6 +194,13 @@ namespace BulletSharpGen
             if (t.IsBasic)
             {
                 return false;
+            }
+            if (t.Target != null)
+            {
+                if (t.Target.IsPureEnum)
+                {
+                    return false;
+                }
             }
             if (t.Referenced != null)
             {
@@ -651,69 +215,6 @@ namespace BulletSharpGen
                     return false;
             }
             return true;
-        }
-
-        void ResolveTypeRef(TypeRefDefinition typeRef)
-        {
-            if (typeRef.IsBasic || typeRef.HasTemplateTypeParameter)
-            {
-                return;
-            }
-            if (typeRef.IsPointer || typeRef.IsReference || typeRef.IsConstantArray)
-            {
-                ResolveTypeRef(typeRef.Referenced);
-            }
-            else if (!classDefinitions.ContainsKey(typeRef.Name))
-            {
-                // Search for unscoped enums
-                bool resolvedEnum = false;
-                foreach (var c in classDefinitions.Values.Where(c => c.Enum != null))
-                {
-                    if (typeRef.Name.Equals(c.FullyQualifiedName + "::" + c.Enum.Name))
-                    {
-                        typeRef.Target = c;
-                        resolvedEnum = true;
-                    }
-                }
-                if (!resolvedEnum)
-                {
-                    Console.WriteLine("Class " + typeRef.Name + " not found!");
-                }
-            }
-            else
-            {
-                typeRef.Target = classDefinitions[typeRef.Name];
-            }
-
-            if (typeRef.SpecializedTemplateType != null)
-            {
-                ResolveTypeRef(typeRef.SpecializedTemplateType);
-
-                // Create template specialization class
-                string name = string.Format("{0}<{1}>", typeRef.Name, typeRef.SpecializedTemplateType.Name);
-                if (!classDefinitions.ContainsKey(name))
-                {
-                    var templateClass = typeRef.Target;
-                    if (templateClass != null && !templateClass.IsExcluded)
-                    {
-                        var header = templateClass.Header;
-                        var specializedClass = new ClassDefinition(name, header);
-                        specializedClass.BaseClass = templateClass;
-                        header.Classes.Add(specializedClass);
-                        classDefinitions.Add(name, specializedClass);
-                    }
-                }
-            }
-        }
-
-        static string GetTabs(int n)
-        {
-            StringBuilder builder = new StringBuilder();
-            for (int i = 0; i < n; i++)
-            {
-                builder.Append('\t');
-            }
-            return builder.ToString();
         }
 
         public static string GetTypeName(TypeRefDefinition type)
@@ -921,68 +422,6 @@ namespace BulletSharpGen
                 default:
                     return null;
             }
-        }
-
-        public string GetManagedMethodName(MethodDefinition method)
-        {
-            if (methodNameMapping.ContainsKey(method.Name))
-            {
-                return methodNameMapping[method.Name];
-            }
-
-            if (method.Name.StartsWith("operator"))
-            {
-                return method.Name;
-            }
-
-            string managedName = method.Name;
-            while (managedName.Contains("_"))
-            {
-                int pos = managedName.IndexOf('_');
-                managedName = managedName.Substring(0, pos) + managedName.Substring(pos + 1, 1).ToUpper() + managedName.Substring(pos + 2);
-            }
-
-            return managedName.Substring(0, 1).ToUpper() + managedName.Substring(1);
-        }
-
-        public string GetManagedParameterName(ParameterDefinition param)
-        {
-            if (parameterNameMapping.ContainsKey(param.Name))
-            {
-                return parameterNameMapping[param.Name];
-            }
-
-            string managedName = param.Name;
-            if (managedName.StartsWith("__unnamed"))
-            {
-                return managedName;
-            }
-
-            if (managedName.Length == 1)
-            {
-                return managedName.ToLower();
-            }
-
-            // Remove underscores
-            // one_two_three -> oneTwoThree
-            while (managedName.Contains("_"))
-            {
-                int pos = managedName.IndexOf('_');
-                if (pos == 0)
-                {
-                    managedName = managedName.Substring(1);
-                }
-                else if (pos >= managedName.Length - 1)
-                {
-                    managedName = managedName.Substring(0, pos);
-                    break;
-                }
-                else
-                {
-                    managedName = managedName.Substring(0, pos) + managedName.Substring(pos + 1, 1).ToUpper() + managedName.Substring(pos + 2);
-                }
-            }
-            return managedName;
         }
 
         public static string GetTypeMarshalPrologue(ParameterDefinition parameter, MethodDefinition method)
@@ -1340,7 +779,7 @@ namespace BulletSharpGen
             return "value";
         }
 
-        private bool IsExcludedClass(ClassDefinition cl)
+        protected override bool IsExcludedClass(ClassDefinition cl)
         {
             if (cl.Name.StartsWith("b3"))
             {
@@ -1349,7 +788,7 @@ namespace BulletSharpGen
 
             // Exclude all "FloatData/DoubleData" serialization classes
             return (cl.Name.EndsWith("Data")
-                ||cl.Name.EndsWith("Data2"))
+                || cl.Name.EndsWith("Data2"))
                 && !cl.ManagedName.Equals("ContactSolverInfoData");
         }
     }

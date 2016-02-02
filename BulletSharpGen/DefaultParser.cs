@@ -106,14 +106,17 @@ namespace BulletSharpGen
             foreach (var @class in Project.ClassDefinitions.Values)
             {
                 @class.IsAbstract = @class.AbstractMethods.Any();
-                @class.IsExcluded = IsExcludedClass(@class);
+                if (IsExcludedClass(@class))
+                {
+                    @class.IsExcluded = true;
+                }
             }
         }
 
         void ParseEnums()
         {
             // For enums, remove any common prefix and check for flags
-            foreach (ClassDefinition @class in Project.ClassDefinitions.Values.Where(c => c is EnumDefinition))
+            foreach (var @class in Project.ClassDefinitions.Values.Where(c => c is EnumDefinition))
             {
                 var @enum = @class as EnumDefinition;
 
@@ -206,11 +209,11 @@ namespace BulletSharpGen
             {
                 // Search for unscoped enums
                 bool resolvedEnum = false;
-                foreach (var c in Project.ClassDefinitions.Values.Where(c => c is EnumDefinition))
+                foreach (var @class in Project.ClassDefinitions.Values.Where(c => c is EnumDefinition))
                 {
-                    if (typeRef.Name.Equals(c.FullyQualifiedName + "::" + c.Name))
+                    if (typeRef.Name.Equals(@class.FullyQualifiedName + "::" + @class.Name))
                     {
-                        typeRef.Target = c;
+                        typeRef.Target = @class;
                         resolvedEnum = true;
                     }
                 }
@@ -329,7 +332,7 @@ namespace BulletSharpGen
 
             // Apply class properties
             var classNameMapping = Project.ClassNameMapping as ScriptedMapping;
-            foreach (ClassDefinition @class in Project.ClassDefinitions.Values)
+            foreach (var @class in Project.ClassDefinitions.Values)
             {
                 classNameMapping.Globals.Header = @class.Header;
                 @class.ManagedName = classNameMapping.Map(@class.Name);
@@ -405,7 +408,7 @@ namespace BulletSharpGen
                     // Generate getter/setter methods
                     string getterName, setterName;
                     string managedGetterName, managedSetterName;
-                    string verb = _booleanVerbs.Where(v => name.StartsWith(v)).FirstOrDefault();
+                    string verb = _booleanVerbs.FirstOrDefault(v => name.StartsWith(v));
                     if (verb != null && "bool".Equals(field.Type.Name))
                     {
                         getterName = name;
@@ -540,7 +543,7 @@ namespace BulletSharpGen
                     {
                         string name = method.ManagedName.Substring(3);
                         // Find the property with the matching getter
-                        foreach (PropertyDefinition prop in @class.Properties)
+                        foreach (var prop in @class.Properties)
                         {
                             if (prop.Setter != null)
                             {

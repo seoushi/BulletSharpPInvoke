@@ -82,12 +82,12 @@ btScalar btSliderConstraint_getDampingOrthoLin(btSliderConstraint* obj)
 {
 	return obj->getDampingOrthoLin();
 }
-/*
+
 int btSliderConstraint_getFlags(btSliderConstraint* obj)
 {
 	return obj->getFlags();
 }
-*/
+
 void btSliderConstraint_getFrameOffsetA(btSliderConstraint* obj, btScalar* value)
 {
 	TRANSFORM_OUT(&obj->getFrameOffsetA(), value);

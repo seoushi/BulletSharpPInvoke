@@ -3,16 +3,17 @@
 #include "conversion.h"
 #include "btMotionState_wrap.h"
 
-btMotionStateWrapper::btMotionStateWrapper(pMotionState_GetWorldTransform getWorldTransformCallback, pMotionState_SetWorldTransform setWorldTransformCallback)
+btMotionStateWrapper::btMotionStateWrapper(pMotionState_GetWorldTransform getWorldTransformCallback, pMotionState_SetWorldTransform setWorldTransformCallback, void* managedMotionStatePtr)
 {
 	_getWorldTransformCallback = getWorldTransformCallback;
 	_setWorldTransformCallback = setWorldTransformCallback;
+    managedMotionState = managedMotionStatePtr;
 }
 
 void btMotionStateWrapper::getWorldTransform(btTransform& worldTrans) const
 {
 	ATTRIBUTE_ALIGNED16(btScalar) worldTransTemp[16];
-	_getWorldTransformCallback(worldTransTemp);
+	_getWorldTransformCallback(managedMotionState,worldTransTemp);
 	MatrixTobtTransform(worldTransTemp, &worldTrans);
 }
 
@@ -20,13 +21,14 @@ void btMotionStateWrapper::setWorldTransform(const btTransform& worldTrans)
 {
 	ATTRIBUTE_ALIGNED16(btScalar) worldTransTemp[16];
 	btTransformToMatrix(&worldTrans, worldTransTemp);
-	_setWorldTransformCallback(worldTransTemp);
+	_setWorldTransformCallback(managedMotionState,worldTransTemp);
 }
 
 
-btMotionStateWrapper* btMotionStateWrapper_new(pMotionState_GetWorldTransform getWorldTransformCallback, pMotionState_SetWorldTransform setWorldTransformCallback)
+btMotionStateWrapper* btMotionStateWrapper_new(pMotionState_GetWorldTransform getWorldTransformCallback, pMotionState_SetWorldTransform setWorldTransformCallback,
+    void* managedMotionStatePtr)
 {
-	return ALIGNED_NEW(btMotionStateWrapper)(getWorldTransformCallback, setWorldTransformCallback);
+	return ALIGNED_NEW(btMotionStateWrapper)(getWorldTransformCallback, setWorldTransformCallback, managedMotionStatePtr);
 }
 
 

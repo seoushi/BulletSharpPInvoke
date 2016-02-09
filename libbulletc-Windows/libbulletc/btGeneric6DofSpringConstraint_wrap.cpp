@@ -20,7 +20,7 @@ void btGeneric6DofSpringConstraint_enableSpring(btGeneric6DofSpringConstraint* o
 {
 	obj->enableSpring(index, onOff);
 }
-/*
+
 btScalar btGeneric6DofSpringConstraint_getDamping(btGeneric6DofSpringConstraint* obj, int index)
 {
 	return obj->getDamping(index);
@@ -40,7 +40,7 @@ bool btGeneric6DofSpringConstraint_isSpringEnabled(btGeneric6DofSpringConstraint
 {
 	return obj->isSpringEnabled(index);
 }
-*/
+
 void btGeneric6DofSpringConstraint_setDamping(btGeneric6DofSpringConstraint* obj, int index, btScalar damping)
 {
 	obj->setDamping(index, damping);

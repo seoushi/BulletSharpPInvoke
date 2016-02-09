@@ -39,38 +39,37 @@ void btConeTwistConstraint_getAFrame(btConeTwistConstraint* obj, btScalar* value
 {
 	TRANSFORM_OUT(&obj->getAFrame(), value);
 }
-/*
+
 bool btConeTwistConstraint_getAngularOnly(btConeTwistConstraint* obj)
 {
 	return obj->getAngularOnly();
 }
-*/
+
 void btConeTwistConstraint_getBFrame(btConeTwistConstraint* obj, btScalar* value)
 {
 	TRANSFORM_OUT(&obj->getBFrame(), value);
 }
-/*
+
 btScalar btConeTwistConstraint_getBiasFactor(btConeTwistConstraint* obj)
 {
 	return obj->getBiasFactor();
 }
 
-
 btScalar btConeTwistConstraint_getDamping(btConeTwistConstraint* obj)
 {
 	return obj->getDamping();
 }
-*/
+
 btScalar btConeTwistConstraint_getFixThresh(btConeTwistConstraint* obj)
 {
 	return obj->getFixThresh();
 }
-/*
+
 int btConeTwistConstraint_getFlags(btConeTwistConstraint* obj)
 {
 	return obj->getFlags();
 }
-*/
+
 void btConeTwistConstraint_getFrameOffsetA(btConeTwistConstraint* obj, btScalar* value)
 {
 	TRANSFORM_OUT(&obj->getFrameOffsetA(), value);
@@ -94,7 +93,7 @@ void btConeTwistConstraint_getInfo2NonVirtual(btConeTwistConstraint* obj, btType
 	MATRIX3X3_CONV(invInertiaWorldB);
 	obj->getInfo2NonVirtual(info, TRANSFORM_USE(transA), TRANSFORM_USE(transB), MATRIX3X3_USE(invInertiaWorldA), MATRIX3X3_USE(invInertiaWorldB));
 }
-/*
+
 btScalar btConeTwistConstraint_getLimit(btConeTwistConstraint* obj, int limitIndex)
 {
 	return obj->getLimit(limitIndex);
@@ -114,17 +113,17 @@ void btConeTwistConstraint_getMotorTarget(btConeTwistConstraint* obj, btScalar* 
 {
 	QUATERNION_OUT(&obj->getMotorTarget(), q);
 }
-*/
+
 void btConeTwistConstraint_GetPointForAngle(btConeTwistConstraint* obj, btScalar fAngleInRadians, btScalar fLength, btScalar* value)
 {
 	VECTOR3_OUT_VAL(obj->GetPointForAngle(fAngleInRadians, fLength), value);
 }
-/*
+
 btScalar btConeTwistConstraint_getRelaxationFactor(btConeTwistConstraint* obj)
 {
 	return obj->getRelaxationFactor();
 }
-*/
+
 int btConeTwistConstraint_getSolveSwingLimit(btConeTwistConstraint* obj)
 {
 	return obj->getSolveSwingLimit();
@@ -159,7 +158,7 @@ btScalar btConeTwistConstraint_getTwistSpan(btConeTwistConstraint* obj)
 {
 	return obj->getTwistSpan();
 }
-/*
+
 bool btConeTwistConstraint_isMaxMotorImpulseNormalized(btConeTwistConstraint* obj)
 {
 	return obj->isMaxMotorImpulseNormalized();
@@ -169,7 +168,7 @@ bool btConeTwistConstraint_isMotorEnabled(btConeTwistConstraint* obj)
 {
 	return obj->isMotorEnabled();
 }
-*/
+
 bool btConeTwistConstraint_isPastSwingLimit(btConeTwistConstraint* obj)
 {
 	return obj->isPastSwingLimit();

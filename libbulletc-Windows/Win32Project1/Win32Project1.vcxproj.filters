@@ -627,9 +627,6 @@
     <ClInclude Include="..\src\LinearMath\btConvexHullComputer.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\LinearMath\btCpuFeatureUtility.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\LinearMath\btDefaultMotionState.h">
       <Filter>Source Files</Filter>
     </ClInclude>
@@ -952,9 +949,6 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="..\libbulletc\btConvexTriangleMeshShape_wrap.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\libbulletc\btCpuFeatureUtility_wrap.h">
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="..\libbulletc\btCylinderShape_wrap.h">
@@ -1959,9 +1953,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\libbulletc\btConvexTriangleMeshShape_wrap.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\libbulletc\btCpuFeatureUtility_wrap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\libbulletc\btCylinderShape_wrap.cpp">

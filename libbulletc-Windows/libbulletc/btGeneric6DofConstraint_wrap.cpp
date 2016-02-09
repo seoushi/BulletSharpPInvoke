@@ -471,12 +471,12 @@ void btGeneric6DofConstraint_getCalculatedTransformB(btGeneric6DofConstraint* ob
 {
 	TRANSFORM_OUT(&obj->getCalculatedTransformB(), value);
 }
-/*
+
 int btGeneric6DofConstraint_getFlags(btGeneric6DofConstraint* obj)
 {
 	return obj->getFlags();
 }
-*/
+
 void btGeneric6DofConstraint_getFrameOffsetA(btGeneric6DofConstraint* obj, btScalar* value)
 {
 	TRANSFORM_OUT(&obj->getFrameOffsetA(), value);
@@ -536,12 +536,12 @@ bool btGeneric6DofConstraint_getUseFrameOffset(btGeneric6DofConstraint* obj)
 {
 	return obj->getUseFrameOffset();
 }
-/*
+
 bool btGeneric6DofConstraint_getUseLinearReferenceFrameA(btGeneric6DofConstraint* obj)
 {
 	return obj->getUseLinearReferenceFrameA();
 }
-*/
+
 bool btGeneric6DofConstraint_getUseSolveConstraintObsolete(btGeneric6DofConstraint* obj)
 {
 	return obj->m_useSolveConstraintObsolete;
@@ -599,12 +599,12 @@ void btGeneric6DofConstraint_setUseFrameOffset(btGeneric6DofConstraint* obj, boo
 {
 	obj->setUseFrameOffset(frameOffsetOnOff);
 }
-/*
+
 void btGeneric6DofConstraint_setUseLinearReferenceFrameA(btGeneric6DofConstraint* obj, bool linearReferenceFrameA)
 {
 	obj->setUseLinearReferenceFrameA(linearReferenceFrameA);
 }
-*/
+
 void btGeneric6DofConstraint_setUseSolveConstraintObsolete(btGeneric6DofConstraint* obj, bool value)
 {
 	obj->m_useSolveConstraintObsolete = value;

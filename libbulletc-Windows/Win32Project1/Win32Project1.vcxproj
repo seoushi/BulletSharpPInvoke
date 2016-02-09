@@ -81,6 +81,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
+    <TargetName>libbulletc</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -118,7 +119,7 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;WIN32PROJECT1_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;USE_GRAPHICAL_BENCHMARK;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_WARNINGS;NO_OPENGL3;CMAKE_INTDIR="Release";%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>$(SolutionDir)\Extras\ConvexDecomposition;$(SolutionDir)Extras\Serialize\BulletWorldImporter;$(SolutionDir)\Extras\HACD;$(SolutionDir)\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
@@ -132,12 +133,13 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
-      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>NDEBUG;_WINDOWS;_USRDLL;WIN32PROJECT1_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WIN64;USE_GRAPHICAL_BENCHMARK;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_WARNINGS;NO_OPENGL3;CMAKE_INTDIR="Release";%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>$(SolutionDir)\Extras\ConvexDecomposition;$(SolutionDir)Extras\Serialize\BulletWorldImporter;$(SolutionDir)\Extras\HACD;$(SolutionDir)\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -235,7 +237,6 @@
     <ClInclude Include="..\libbulletc\btConvexPolyhedron_wrap.h" />
     <ClInclude Include="..\libbulletc\btConvexShape_wrap.h" />
     <ClInclude Include="..\libbulletc\btConvexTriangleMeshShape_wrap.h" />
-    <ClInclude Include="..\libbulletc\btCpuFeatureUtility_wrap.h" />
     <ClInclude Include="..\libbulletc\btCylinderShape_wrap.h" />
     <ClInclude Include="..\libbulletc\btDantzigSolver_wrap.h" />
     <ClInclude Include="..\libbulletc\btDbvtBroadphase_wrap.h" />
@@ -545,7 +546,6 @@
     <ClInclude Include="..\src\LinearMath\btAlignedObjectArray.h" />
     <ClInclude Include="..\src\LinearMath\btConvexHull.h" />
     <ClInclude Include="..\src\LinearMath\btConvexHullComputer.h" />
-    <ClInclude Include="..\src\LinearMath\btCpuFeatureUtility.h" />
     <ClInclude Include="..\src\LinearMath\btDefaultMotionState.h" />
     <ClInclude Include="..\src\LinearMath\btGeometryUtil.h" />
     <ClInclude Include="..\src\LinearMath\btGrahamScan2dConvexHull.h" />
@@ -653,7 +653,6 @@
     <ClCompile Include="..\libbulletc\btConvexPolyhedron_wrap.cpp" />
     <ClCompile Include="..\libbulletc\btConvexShape_wrap.cpp" />
     <ClCompile Include="..\libbulletc\btConvexTriangleMeshShape_wrap.cpp" />
-    <ClCompile Include="..\libbulletc\btCpuFeatureUtility_wrap.cpp" />
     <ClCompile Include="..\libbulletc\btCylinderShape_wrap.cpp" />
     <ClCompile Include="..\libbulletc\btDantzigSolver_wrap.cpp" />
     <ClCompile Include="..\libbulletc\btDbvtBroadphase_wrap.cpp" />

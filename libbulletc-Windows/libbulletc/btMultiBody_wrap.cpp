@@ -113,7 +113,7 @@ void btMultiBody_clearVelocities(btMultiBody* obj)
 {
 	obj->clearVelocities();
 }
-/*
+
 void btMultiBody_computeAccelerationsArticulatedBodyAlgorithmMultiDof(btMultiBody* obj, btScalar dt, btAlignedScalarArray* scratch_r, btAlignedVector3Array* scratch_v, btAlignedMatrix3x3Array* scratch_m)
 {
 	obj->computeAccelerationsArticulatedBodyAlgorithmMultiDof(dt, *scratch_r, *scratch_v, *scratch_m);
@@ -131,7 +131,7 @@ void btMultiBody_fillConstraintJacobianMultiDof(btMultiBody* obj, int link, cons
 	VECTOR3_CONV(normal_lin);
 	obj->fillConstraintJacobianMultiDof(link, VECTOR3_USE(contact_point), VECTOR3_USE(normal_ang), VECTOR3_USE(normal_lin), jac, *scratch_r, *scratch_v, *scratch_m);
 }
-*/
+
 void btMultiBody_fillContactJacobianMultiDof(btMultiBody* obj, int link, const btScalar* contact_point, const btScalar* normal, btScalar* jac, btAlignedScalarArray* scratch_r, btAlignedVector3Array* scratch_v, btAlignedMatrix3x3Array* scratch_m)
 {
 	VECTOR3_CONV(contact_point);
@@ -510,7 +510,7 @@ void btMultiBody_setPosUpdated(btMultiBody* obj, bool updated)
 {
 	obj->setPosUpdated(updated);
 }
-/*
+
 void btMultiBody_setupFixed(btMultiBody* obj, int linkIndex, btScalar mass, const btScalar* inertia, int parent, const btScalar* rotParentToThis, const btScalar* parentComToThisPivotOffset, const btScalar* thisPivotToThisComOffset)
 {
 	VECTOR3_CONV(inertia);
@@ -519,7 +519,7 @@ void btMultiBody_setupFixed(btMultiBody* obj, int linkIndex, btScalar mass, cons
 	VECTOR3_CONV(thisPivotToThisComOffset);
 	obj->setupFixed(linkIndex, mass, VECTOR3_USE(inertia), parent, QUATERNION_USE(rotParentToThis), VECTOR3_USE(parentComToThisPivotOffset), VECTOR3_USE(thisPivotToThisComOffset));
 }
-*/
+
 void btMultiBody_setupPlanar(btMultiBody* obj, int i, btScalar mass, const btScalar* inertia, int parent, const btScalar* rotParentToThis, const btScalar* rotationAxis, const btScalar* parentComToThisComOffset)
 {
 	VECTOR3_CONV(inertia);

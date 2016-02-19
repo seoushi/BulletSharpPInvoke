@@ -36,6 +36,9 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.XML" />
+    <Reference Include="UnityEngine">
+      <HintPath>C:\Program Files\Unity.5.3.1\Editor\Data\PlaybackEngines\MetroSupport\Managed\UAP\MonoShell\UnityEngine.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BSExtensionMethods.cs" />
@@ -61,9 +64,6 @@
     <Compile Include="Collision\Dbvt.cs" />
     <Compile Include="Collision\EmptyCollisionAlgorithm.cs" />
     <Compile Include="Collision\EmptyShape.cs" />
-    <Compile Include="Collision\GImpact\CompoundFromGImpact.cs" />
-    <Compile Include="Collision\GImpact\GImpactQuantizedBvh.cs" />
-    <Compile Include="Collision\GImpact\TriangleShapeEx.cs" />
     <Compile Include="Collision\GjkConvexCast.cs" />
     <Compile Include="Collision\GjkEpaPenetrationDepthSolver.cs" />
     <Compile Include="Collision\HeightfieldTerrainShape.cs" />
@@ -101,6 +101,13 @@
     <Compile Include="Dynamics\Featherstone\MultiBodyPoint2Point.cs" />
     <Compile Include="Dynamics\Featherstone\MultiBodySolverConstraint.cs" />
     <Compile Include="Dynamics\FixedConstraint.cs" />
+    <Compile Include="Dynamics\GImpact\BoxCollision.cs" />
+    <Compile Include="Dynamics\GImpact\CompoundFromGImpact.cs" />
+    <Compile Include="Dynamics\GImpact\GImpactBvh.cs" />
+    <Compile Include="Dynamics\GImpact\GImpactCollisionAlgorithm.cs" />
+    <Compile Include="Dynamics\GImpact\GImpactQuantizedBvh.cs" />
+    <Compile Include="Dynamics\GImpact\GImpactShape.cs" />
+    <Compile Include="Dynamics\GImpact\TriangleShapeEx.cs" />
     <Compile Include="Dynamics\IAction.cs" />
     <Compile Include="Dynamics\ICharacterController.cs" />
     <Compile Include="Dynamics\MlcpSolver.cs" />
@@ -135,10 +142,6 @@
     <Compile Include="Collision\DefaultCollisionConfiguration.cs" />
     <Compile Include="Collision\DiscreteCollisionDetectorInterface.cs" />
     <Compile Include="Collision\GhostObject.cs" />
-    <Compile Include="Collision\GImpact\BoxCollision.cs" />
-    <Compile Include="Collision\GImpact\GImpactBvh.cs" />
-    <Compile Include="Collision\GImpact\GImpactCollisionAlgorithm.cs" />
-    <Compile Include="Collision\GImpact\GImpactShape.cs" />
     <Compile Include="Collision\GjkPairDetector.cs" />
     <Compile Include="Collision\ManifoldPoint.cs" />
     <Compile Include="Collision\MinkowskiPenetrationDepthSolver.cs" />
@@ -193,7 +196,6 @@
     <Compile Include="LinearMath\AlignedVector3Array.cs" />
     <Compile Include="LinearMath\Collections.cs" />
     <Compile Include="LinearMath\AlignedIndexedMeshArray.cs" />
-    <Compile Include="LinearMath\CpuFeatureUtility.cs" />
     <Compile Include="LinearMath\DebugDraw.cs" />
     <Compile Include="LinearMath\DefaultMotionState.cs" />
     <Compile Include="LinearMath\GeometryUtil.cs" />
@@ -232,6 +234,15 @@
     <Compile Include="Utilities.cs">
       <SubType>Code</SubType>
     </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Dynamics\GImpact\BoxCollision.cs.meta" />
+    <None Include="Dynamics\GImpact\CompoundFromGImpact.cs.meta" />
+    <None Include="Dynamics\GImpact\GImpactBvh.cs.meta" />
+    <None Include="Dynamics\GImpact\GImpactCollisionAlgorithm.cs.meta" />
+    <None Include="Dynamics\GImpact\GImpactQuantizedBvh.cs.meta" />
+    <None Include="Dynamics\GImpact\GImpactShape.cs.meta" />
+    <None Include="Dynamics\GImpact\TriangleShapeEx.cs.meta" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

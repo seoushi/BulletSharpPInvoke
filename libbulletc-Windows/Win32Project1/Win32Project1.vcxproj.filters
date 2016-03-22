@@ -1275,6 +1275,15 @@
     <ClInclude Include="..\libbulletc\main.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\bullet3\Extras\Serialize\BulletXmlWorldImporter\string_split.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\bullet3\Extras\Serialize\BulletXmlWorldImporter\tinystr.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\bullet3\Extras\Serialize\BulletXmlWorldImporter\tinyxml.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -2268,6 +2277,21 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\libbulletc\hacdHACD_wrap.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\bullet3\Extras\Serialize\BulletXmlWorldImporter\string_split.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\bullet3\Extras\Serialize\BulletXmlWorldImporter\tinystr.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\bullet3\Extras\Serialize\BulletXmlWorldImporter\tinyxml.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\bullet3\Extras\Serialize\BulletXmlWorldImporter\tinyxmlerror.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\bullet3\Extras\Serialize\BulletXmlWorldImporter\tinyxmlparser.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

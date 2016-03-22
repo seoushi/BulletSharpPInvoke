@@ -15,12 +15,12 @@ btSoftBody_AJoint_IControlWrapper::btSoftBody_AJoint_IControlWrapper(pIControl_P
 
 void btSoftBody_AJoint_IControlWrapper::Prepare(btSoftBody::AJoint* aJoint)
 {
-	_prepareCallback(aJoint);
+	_prepareCallback(_wrapperData, aJoint);
 }
 
 btScalar btSoftBody_AJoint_IControlWrapper::Speed(btSoftBody::AJoint* aJoint, btScalar current)
 {
-	return _speedCallback(aJoint, current);
+	return _speedCallback(_wrapperData, aJoint, current);
 }
 
 void* btSoftBody_AJoint_IControlWrapper::getWrapperData()
@@ -293,6 +293,11 @@ void btSoftBody_Anchor_setLocal(btSoftBody::Anchor* obj, const btScalar* value)
 void btSoftBody_Anchor_setNode(btSoftBody::Anchor* obj, btSoftBody::Node* value)
 {
 	obj->m_node = value;
+}
+
+void btSoftBody_Anchor_delete(btSoftBody::Anchor* obj)
+{
+	delete obj;
 }
 
 
@@ -701,6 +706,11 @@ void btSoftBody_Cluster_setNvimpulses(btSoftBody::Cluster* obj, int value)
 void btSoftBody_Cluster_setSelfCollisionImpulseFactor(btSoftBody::Cluster* obj, btScalar value)
 {
 	obj->m_selfCollisionImpulseFactor = value;
+}
+
+void btSoftBody_Cluster_delete(btSoftBody::Cluster* obj)
+{
+	delete obj;
 }
 
 

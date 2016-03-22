@@ -121,7 +121,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;USE_GRAPHICAL_BENCHMARK;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_WARNINGS;NO_OPENGL3;CMAKE_INTDIR="Release";%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)\Extras\ConvexDecomposition;$(SolutionDir)Extras\Serialize\BulletWorldImporter;$(SolutionDir)\Extras\HACD;$(SolutionDir)\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\Extras\ConvexDecomposition;$(SolutionDir)\Extras\Serialize\BulletXmlWorldImporter;$(SolutionDir)\Extras\Serialize\BulletWorldImporter;$(SolutionDir)\Extras\HACD;$(SolutionDir)\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -139,7 +139,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WIN64;USE_GRAPHICAL_BENCHMARK;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_WARNINGS;NO_OPENGL3;CMAKE_INTDIR="Release";%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)\Extras\ConvexDecomposition;$(SolutionDir)Extras\Serialize\BulletWorldImporter;$(SolutionDir)\Extras\HACD;$(SolutionDir)\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\Extras\ConvexDecomposition;$(SolutionDir)\Extras\Serialize\BulletXmlWorldImporter;$(SolutionDir)\Extras\Serialize\BulletWorldImporter;$(SolutionDir)\Extras\HACD;$(SolutionDir)\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -152,6 +152,9 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\bullet3\Extras\Serialize\BulletXmlWorldImporter\string_split.h" />
+    <ClInclude Include="..\..\..\bullet3\Extras\Serialize\BulletXmlWorldImporter\tinystr.h" />
+    <ClInclude Include="..\..\..\bullet3\Extras\Serialize\BulletXmlWorldImporter\tinyxml.h" />
     <ClInclude Include="..\Extras\ConvexDecomposition\bestfit.h" />
     <ClInclude Include="..\Extras\ConvexDecomposition\bestfitobb.h" />
     <ClInclude Include="..\Extras\ConvexDecomposition\cd_hull.h" />
@@ -573,6 +576,11 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\bullet3\Extras\Serialize\BulletXmlWorldImporter\string_split.cpp" />
+    <ClCompile Include="..\..\..\bullet3\Extras\Serialize\BulletXmlWorldImporter\tinystr.cpp" />
+    <ClCompile Include="..\..\..\bullet3\Extras\Serialize\BulletXmlWorldImporter\tinyxml.cpp" />
+    <ClCompile Include="..\..\..\bullet3\Extras\Serialize\BulletXmlWorldImporter\tinyxmlerror.cpp" />
+    <ClCompile Include="..\..\..\bullet3\Extras\Serialize\BulletXmlWorldImporter\tinyxmlparser.cpp" />
     <ClCompile Include="..\Extras\ConvexDecomposition\bestfit.cpp" />
     <ClCompile Include="..\Extras\ConvexDecomposition\bestfitobb.cpp" />
     <ClCompile Include="..\Extras\ConvexDecomposition\cd_hull.cpp" />

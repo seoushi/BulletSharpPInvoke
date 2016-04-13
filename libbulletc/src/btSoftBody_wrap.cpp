@@ -15,12 +15,12 @@ btSoftBody_AJoint_IControlWrapper::btSoftBody_AJoint_IControlWrapper(pIControl_P
 
 void btSoftBody_AJoint_IControlWrapper::Prepare(btSoftBody::AJoint* aJoint)
 {
-	_prepareCallback(aJoint);
+	_prepareCallback(_wrapperData, aJoint);
 }
 
 btScalar btSoftBody_AJoint_IControlWrapper::Speed(btSoftBody::AJoint* aJoint, btScalar current)
 {
-	return _speedCallback(aJoint, current);
+	return _speedCallback(_wrapperData, aJoint, current);
 }
 
 void* btSoftBody_AJoint_IControlWrapper::getWrapperData()
@@ -293,6 +293,11 @@ void btSoftBody_Anchor_setLocal(btSoftBody::Anchor* obj, const btScalar* value)
 void btSoftBody_Anchor_setNode(btSoftBody::Anchor* obj, btSoftBody::Node* value)
 {
 	obj->m_node = value;
+}
+
+void btSoftBody_Anchor_delete(btSoftBody::Anchor* obj)
+{
+	delete obj;
 }
 
 
@@ -701,6 +706,11 @@ void btSoftBody_Cluster_setNvimpulses(btSoftBody::Cluster* obj, int value)
 void btSoftBody_Cluster_setSelfCollisionImpulseFactor(btSoftBody::Cluster* obj, btScalar value)
 {
 	obj->m_selfCollisionImpulseFactor = value;
+}
+
+void btSoftBody_Cluster_delete(btSoftBody::Cluster* obj)
+{
+	delete obj;
 }
 
 
@@ -1674,7 +1684,7 @@ btScalar btSoftBody_RayFromToCaster_rayFromToTriangle(const btScalar* rayFrom, c
 	VECTOR3_CONV(a);
 	VECTOR3_CONV(b);
 	VECTOR3_CONV(c);
-	return btSoftBody::RayFromToCaster::rayFromToTriangle(VECTOR3_USE(rayFrom), VECTOR3_USE(rayTo), VECTOR3_USE(rayNormalizedDirection), VECTOR3_USE(a), VECTOR3_USE(b), VECTOR3_USE(c));
+    return btSoftBody::RayFromToCaster::rayFromToTriangle(VECTOR3_USE(rayFrom), VECTOR3_USE(rayTo), VECTOR3_USE(rayNormalizedDirection), VECTOR3_USE(a), VECTOR3_USE(b), VECTOR3_USE(c));
 }
 
 btScalar btSoftBody_RayFromToCaster_rayFromToTriangle2(const btScalar* rayFrom, const btScalar* rayTo, const btScalar* rayNormalizedDirection, const btScalar* a, const btScalar* b, const btScalar* c, btScalar maxt)
@@ -3073,8 +3083,8 @@ int btSoftBody_getFaceVertexNormalData2(btSoftBody* obj, btScalar* vertices, btS
 
 int btSoftBody_getLinkVertexData(btSoftBody* obj, btScalar* vertices)
 {
-	btAlignedObjectArray<btSoftBody::Link>* linkArray = &obj->m_links;
-	int linkCount = linkArray->size();
+	//btAlignedObjectArray<btSoftBody::Link>* linkArray = &(obj->m_links);
+	int linkCount = obj->m_links.size();
 	if (linkCount == 0) {
 		return 0;
 	}
@@ -3083,9 +3093,9 @@ int btSoftBody_getLinkVertexData(btSoftBody* obj, btScalar* vertices)
 
 	int i;
 	for (i = 0; i < linkCount; i++) {
-		btSoftBody::Link* l = &linkArray->at(i);
-		VECTOR3_OUT(&l->m_n[0]->m_x, &vertices[0]);
-		VECTOR3_OUT(&l->m_n[1]->m_x, &vertices[3]);
+		//btSoftBody::Link* l = &obj->m_links.at(i);
+		VECTOR3_OUT(obj->m_links.at(i).m_n[0]->m_x, &vertices[0]);
+		VECTOR3_OUT(obj->m_links.at(i).m_n[1]->m_x, &vertices[3]);
 		vertices += 6;
 	}
 

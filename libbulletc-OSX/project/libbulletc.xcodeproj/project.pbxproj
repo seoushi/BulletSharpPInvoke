@@ -2886,8 +2886,9 @@
 					"$(SRCROOT)/Extras/Serialize/BulletWorldImporter",
 					"$(SRCROOT)/Extras/HACD",
 					"$(SRCROOT)/src",
+					"$(SRCROOT)/Extras/Serialize/BulletXmlWorldImporter",
 				);
-				INFOPLIST_FILE = "BulletPhysics OSX/Info.plist";
+				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2909,8 +2910,9 @@
 					"$(SRCROOT)/Extras/Serialize/BulletWorldImporter",
 					"$(SRCROOT)/Extras/HACD",
 					"$(SRCROOT)/src",
+					"$(SRCROOT)/Extras/Serialize/BulletXmlWorldImporter",
 				);
-				INFOPLIST_FILE = "BulletPhysics OSX/Info.plist";
+				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",

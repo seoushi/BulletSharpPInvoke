@@ -2,6 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:/Users/iandeane/Documents/BulletPhysicsBundle/BulletPhysics OSX/libbulletc.xcodeproj">
+      location = "developer:../../../../Users/iandeane/Documents/BulletSharp/BulletSharpPInvoke/libbulletc-OSX/project">
    </FileRef>
 </Workspace>

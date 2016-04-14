@@ -37,6 +37,7 @@ LOCAL_C_INCLUDES := \
 	Extras/ \
 	Extras/Serialize/ \
 	Extras/Serialize/BulletWorldImporter/ \
+	Extras/Serialize/BulletXmlWorldImporter/ \
 	Extras/InverseDynamics/ \
 	Extras/HACD \
 	Extras/GIMPACTUtils \

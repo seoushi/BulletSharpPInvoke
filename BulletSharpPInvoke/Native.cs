@@ -9,6 +9,7 @@ namespace BulletSharp
 #else
 		public const string Dll = "libbulletc";
 #endif
+//        public const string Dll = "libbulletc.dll";
 		public const CallingConvention Conv = CallingConvention.Cdecl;
     }
 }

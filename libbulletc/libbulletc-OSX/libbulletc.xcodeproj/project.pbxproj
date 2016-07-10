@@ -2908,6 +2908,7 @@
 		9E54A10F1C51C63000B37554 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				COMBINE_HIDPI_IMAGES = YES;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2925,6 +2926,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Extras/lib",
 				);
+				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_NAME = libbulletc;
 				SKIP_INSTALL = YES;
 				WRAPPER_EXTENSION = bundle;
@@ -2934,6 +2936,7 @@
 		9E54A1101C51C63000B37554 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				COMBINE_HIDPI_IMAGES = YES;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2951,6 +2954,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Extras/lib",
 				);
+				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_NAME = libbulletc;
 				SKIP_INSTALL = YES;
 				WRAPPER_EXTENSION = bundle;

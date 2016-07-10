@@ -258,7 +258,7 @@ inline void MatrixTobtMatrix3x3(const btScalar* m, btMatrix3x3* t)
 // Alignment cannot be guaranteed in .NET, so aligned temporary intermediate variables
 // must be used to exchange vectors and transforms with Bullet (if SSE is enabled).
 #define TEMP(var) var ## Temp
-#if defined(BT_USE_SSE) //&& defined(BT_USE_SSE_IN_API) && defined(BT_USE_SIMD_VECTOR3)
+#if defined(BT_USE_SSE) || defined(BT_USE_NEON) //&& defined(BT_USE_SSE_IN_API) && defined(BT_USE_SIMD_VECTOR3)
 #define VECTOR3_DEF(vec) ATTRIBUTE_ALIGNED16(btVector3) TEMP(vec)
 #define VECTOR3_IN(from, to) Vector3TobtVector3(from, to)
 #define VECTOR3_CONV(vec) VECTOR3_DEF(vec); VECTOR3_IN(vec, &TEMP(vec))
@@ -314,7 +314,7 @@ inline void MatrixTobtMatrix3x3(const btScalar* m, btMatrix3x3* t)
 #define QUATERNION_CONV(quat)
 #define QUATERNION_USE(quat) *(btQuaternion*)quat
 #define QUATERNION_OUT(from, to) *(btQuaternion*)to = *from
-#define QUATERNION_OUT_VAL(from, to) *(btQuaternion*)to = from
+#define QUATERNION_OUT_VAL(from, to) memcpy(value, obj->getOrientation(), 4 * sizeof(float));  *(btQuaternion*)to = from
 #endif
 #define TRANSFORM_IN(from, to) MatrixTobtTransform(from, to)
 #define TRANSFORM_CONV(tr) TRANSFORM_DEF(tr); TRANSFORM_IN(tr, &TEMP(tr))

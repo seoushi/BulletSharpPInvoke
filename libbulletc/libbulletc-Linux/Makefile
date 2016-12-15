@@ -1,4 +1,4 @@
-CFLAGS += -fPIC -mssse3
+CFLAGS += -fPIC -mssse3 -march=native -O3 
 
 INCLUDES := \
 	/ \
